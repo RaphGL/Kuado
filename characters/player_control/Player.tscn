@@ -70,6 +70,7 @@ expand = true
 
 [node name="Aim" type="RayCast2D" parent="."]
 position = Vector2( 0, 6 )
+enabled = true
 cast_to = Vector2( 600, 0 )
 script = ExtResource( 5 )
 

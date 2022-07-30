@@ -78,10 +78,15 @@ func _physics_process(_delta) -> void:
 func handle_vfx() -> void:
 	# Mouse events
 	var mouse_pos := get_global_mouse_position()
+	var gun_height = $Aim/GunSprite.texture.get_height() / 2
 	if mouse_pos.x > position.x and $PlayerSprite.flip_h:
 		$PlayerSprite.flip_h = false
+		$Aim/GunSprite.flip_v = false
+		$Aim/GunSprite.position.y += gun_height
 	if mouse_pos.x < position.x and not $PlayerSprite.flip_h:
 		$PlayerSprite.flip_h = true
+		$Aim/GunSprite.flip_v = true
+		$Aim/GunSprite.position.y -= gun_height
 
 
 func manage_fuel(delta) -> void:
