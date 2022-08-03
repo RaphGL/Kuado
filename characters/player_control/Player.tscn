@@ -1,10 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/players/player.png" type="Texture" id=1]
 [ext_resource path="res://characters/player_control/Player.gd" type="Script" id=2]
 [ext_resource path="res://characters/player_control/PlayerCamera.gd" type="Script" id=3]
-[ext_resource path="res://assets/players/aim.png" type="Texture" id=4]
-[ext_resource path="res://characters/player_control/Aim.gd" type="Script" id=5]
 [ext_resource path="res://characters/guns/BaseGun.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/players/progress_bar.png" type="Texture" id=7]
 [ext_resource path="res://assets/players/progress.png" type="Texture" id=8]
@@ -68,24 +66,12 @@ margin_bottom = 10.0
 texture = ExtResource( 10 )
 expand = true
 
-[node name="Aim" type="RayCast2D" parent="."]
-position = Vector2( 0, 6 )
-enabled = true
-cast_to = Vector2( 600, 0 )
-script = ExtResource( 5 )
-
-[node name="AimSprite" type="Sprite" parent="Aim"]
-position = Vector2( 64, 0 )
-scale = Vector2( 0.113938, 0.113938 )
-z_index = 98
-texture = ExtResource( 4 )
-offset = Vector2( 1000, 0 )
-
-[node name="Gun" parent="Aim" instance=ExtResource( 6 )]
-
 [node name="DodgeTimeOut" type="Timer" parent="."]
 wait_time = 2.5
 autostart = true
+
+[node name="Gun" parent="." instance=ExtResource( 6 )]
+position = Vector2( -1, 10 )
 
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_Player_body_exited"]

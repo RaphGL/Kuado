@@ -1,7 +1,7 @@
-# TODO health
 # TODO dodge bar
 # TODO gun bullets
 extends RigidBody2D
+class_name Player
 
 # Health
 var hp = 100
@@ -78,15 +78,19 @@ func _physics_process(_delta) -> void:
 func handle_vfx() -> void:
 	# Mouse events
 	var mouse_pos := get_global_mouse_position()
-	var gun_height = $Aim/Gun.height / 2
 	if mouse_pos.x > position.x and $PlayerSprite.flip_h:
 		$PlayerSprite.flip_h = false
-		$Aim/Gun.flip_v = false
-		$Aim/Gun.position.y += gun_height
+		$Gun.flip_v = false
+		$Gun.position.y -= $Gun.height
+		$Gun/GunTarget.position.y -= $Gun.height / 3
+		$Gun/AimSprite.position.y -= $Gun.height / 3
+		$Gun/AimSprite.flip_v = false
 	if mouse_pos.x < position.x and not $PlayerSprite.flip_h:
 		$PlayerSprite.flip_h = true
-		$Aim/Gun.flip_v = true
-		$Aim/Gun.position.y -= gun_height
+		$Gun.flip_v = true
+		$Gun.position.y += $Gun.height
+		$Gun/GunTarget.position.y += $Gun.height / 3
+		$Gun/AimSprite.position.y += $Gun.height / 3
 
 
 func manage_fuel(delta) -> void:
@@ -108,6 +112,9 @@ func manage_fuel(delta) -> void:
 
 	$Progress/ProgressBar.value = amount_of_fuel
 
+func receive_damage(dmg: int) -> void:
+	if hp > 0:
+		hp -= dmg
 
 # Registers when body is on ground
 func _on_Player_body_entered(_body):
@@ -119,3 +126,6 @@ func _on_Player_body_exited(_body):
 
 func _on_DodgeTimeOut_timeout():
 	can_dodge = true
+
+func is_player():
+	return "I'm the player"
