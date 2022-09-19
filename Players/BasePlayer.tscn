@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://2kv2rpqggl7j"]
+
+[ext_resource type="Script" path="res://Players/BasePlayer.gd" id="1_i0k0m"]
+[ext_resource type="Texture2D" uid="uid://cbnfv5qhqekxc" path="res://Players/BasePlayer.png" id="1_x0g02"]
+[ext_resource type="Script" path="res://Players/PlayerCamera.gd" id="3_iy3fl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_073d2"]
+size = Vector2(20, 48)
+
+[node name="BasePlayer" type="CharacterBody2D"]
+script = ExtResource("1_i0k0m")
+
+[node name="PlayerCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_073d2")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture = ExtResource("1_x0g02")
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+script = ExtResource("3_iy3fl")
+
+[node name="PlayerBoost" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+offset_left = -20.0
+offset_top = 29.0
+offset_right = 80.0
+offset_bottom = 56.0
+scale = Vector2(0.4, 0.4)
+value = 50.0
+
+[node name="DodgeTimer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
+
+[connection signal="timeout" from="DodgeTimer" to="." method="_on_dodge_timer_timeout"]
