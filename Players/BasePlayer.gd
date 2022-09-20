@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
-const FLIGHT_VELOCITY = JUMP_VELOCITY / 2
+const WALK_SPEED = 300.0
+const JUMP_VEL = -400.0
+const FLIGHT_VEL = JUMP_VEL / 2
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -44,19 +44,32 @@ func _physics_process(delta) -> void:
 		
 	# Flying controls
 	if Input.is_action_pressed("up") and can_fly:
-		velocity.y = FLIGHT_VELOCITY
+		velocity.y = FLIGHT_VEL
 	
 	if Input.is_action_just_pressed("down"):
-		velocity.y = -JUMP_VELOCITY
+		velocity.y = -JUMP_VEL
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction = Input.get_axis("left", "right")
 	if direction:
-		velocity.x = direction * SPEED
+		velocity.x = direction * WALK_SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-
+		velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
+		
+	if Input.is_action_just_pressed("dodge") and can_dodge:
+		var dodge_pos = position
+		if Input.is_action_pressed("right"):
+			dodge_pos.x += WALK_SPEED / 2
+		if Input.is_action_pressed("left"):
+			dodge_pos.x -= WALK_SPEED / 2
+		if Input.is_action_pressed("up"):
+			dodge_pos.y -= WALK_SPEED / 2
+		
+		var tw = create_tween()
+		tw.tween_property(self, "position", dodge_pos, 0.2)
+		await tw.finished
+		can_dodge = false
+	
 	move_and_slide()
 
 func _process(delta):
